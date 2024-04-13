@@ -167,6 +167,7 @@ public class Main {
                     FileWriter myWriter = new FileWriter(currentFileName);
                     for (String word : usersList){
                         myWriter.write(word);
+                        myWriter.write("\n");
                     }
     
                     myWriter.close();
@@ -177,6 +178,7 @@ public class Main {
                 FileWriter myWriter = new FileWriter(currentFileName);
                 for (String word : usersList){
                     myWriter.write(word);
+                    myWriter.write("\n");
                 }
                 myWriter.close();
     
