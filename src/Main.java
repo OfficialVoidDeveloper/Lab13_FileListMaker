@@ -15,6 +15,7 @@ public class Main {
     private static String newFileName = "";
     private static ArrayList <String> LoadedList = new ArrayList<>();
     private static boolean loaded = false;
+    private static boolean isSaved = false;
     
     
     
@@ -24,7 +25,6 @@ public class Main {
         String userSelection;
         Scanner sc = new Scanner(System.in);
         boolean done = false;
-        boolean isSaved = true;
         
         // Files
         JFileChooser chooser = new JFileChooser();
@@ -37,6 +37,7 @@ public class Main {
 
             // If Statement
             if (userSelection.equalsIgnoreCase("q")){
+                saveCurrentList(isSaved, sc, chooser);
                 done = true;
                 System.exit(0);
             }
@@ -49,15 +50,18 @@ public class Main {
                 isSaved = false;
             }
             else if (userSelection.equalsIgnoreCase("v")){
+                saveCurrentList(isSaved, sc, chooser);
                 readFromLoadedFile(loaded);
             }
             else if (userSelection.equalsIgnoreCase("o")){
                 openAndLoadFileToList(chooser);
+                loaded = true;
             }
             else if (userSelection.equalsIgnoreCase("s")){
                 if (usersList.isEmpty()){
                     System.out.println("No Item in the User's List");
                     System.out.println("\n<Cannot Be Saved>");
+                    isSaved = false;
                 }else {
                     saveCurrentList(isSaved, sc, chooser);
                     isSaved = true;
@@ -65,6 +69,7 @@ public class Main {
             }
             else if (userSelection.equalsIgnoreCase("c")){
                 clearList();
+                isSaved = false;
             }
 
 
@@ -77,6 +82,7 @@ public class Main {
         boolean wantToSave = false;
         boolean wantToCreateANewFile = false;
         if (!isSaved){
+            isSaved = false;
             wantToSave = SafeInput.getYNConfirm(pipe, "Would you like to save your changes?\n>> ");
             if (wantToSave){
                 wantToCreateANewFile = SafeInput.getYNConfirm(pipe, "\n Would you like to create a new file?\n>> ");
@@ -84,8 +90,6 @@ public class Main {
                     createFile(pipe, wantToCreateANewFile);
                 else
                     createFile(pipe, wantToCreateANewFile);
-            }else {
-                openAndLoadFileToList(chooser);
             }
         }
     }
@@ -96,6 +100,8 @@ public class Main {
             userInput = SafeInput.getNonZeroLenString(pipe, prompt);
         }while(userInput.isEmpty());
         usersList.add(userInput);
+        LoadedList.add(userInput);
+        
         System.out.println("<Added>\n");
     }
 
@@ -105,6 +111,7 @@ public class Main {
             userInput = SafeInput.getNonZeroLenString(pipe, promopt);
         }while(userInput.isEmpty());
         usersList.remove(userInput);
+        LoadedList.remove(userInput);
         System.out.println("<Removed>\n");
     }
 
@@ -123,6 +130,7 @@ public class Main {
                 while (reader.ready()){
                     rec = reader.readLine();
                     LoadedList.add(rec);
+                    usersList.add(rec);
                 }
 
 
@@ -148,6 +156,7 @@ public class Main {
                 rec = LoadedList.get(i);
                 System.out.println(rec);
             }
+            loaded = false;
         }
         }
 
